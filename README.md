@@ -4,7 +4,10 @@
 ```
 yarn install
 ```
-
+Then, create a new `.env` file and specify the address for your API there. For example:
+```
+VUE_APP_API_URL=house-search.com/api
+```
 ### Compiles and hot-reloads for development
 ```
 yarn serve
