@@ -68,7 +68,7 @@ export default {
     submit() {
       this.loading = true;
       axios
-        .post(`http://house-search.com/api/v1.0.0/search`, {
+        .post(`http://${process.env.VUE_APP_API_URL}/v1.0.0/search`, {
           name: this.name,
           minPrice: this.minPrice,
           maxPrice: this.maxPrice,
