@@ -4,10 +4,12 @@
 ```
 yarn install
 ```
-Then, create a new `.env` file and specify the address for your API there. For example:
+Then, create a new `.env` file and specify the address for your API there.
+For example:
 ```
 VUE_APP_API_URL=house-search.com/api
 ```
+Backend (API): [avinmaster - House Search Backend](https://github.com/avinmaster/house-search-backend)
 ### Compiles and hot-reloads for development
 ```
 yarn serve
