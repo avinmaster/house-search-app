@@ -105,7 +105,6 @@ export default {
           axios.post(this.nextPage, this.filtersData).then((data) => {
             this.nextPage = data.data.houses.next_page_url;
             this.results = [...this.results, ...data.data.houses.data];
-            console.log(this.results);
           });
         }
       };
