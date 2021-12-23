@@ -25,5 +25,9 @@ yarn build
 yarn lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### About functionality
+- Searching by name (not only whole word)
+- Other filters
+- Infinite scroll with data preloading
+- Responsive layout
+- Fast

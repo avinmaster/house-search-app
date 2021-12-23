@@ -32,6 +32,9 @@
     </div>
     <p v-show="loading" class="loading">Loading...</p>
     <results-component v-show="!loading" :results="results"></results-component>
+    <p v-show="!nextPage" class="loading">
+      No more houses matching your search
+    </p>
   </div>
 </template>
 
@@ -62,29 +65,57 @@ export default {
       results: [],
       filtersVisible: true,
       loading: false,
+      nextPage: true,
     };
+  },
+  computed: {
+    filtersData() {
+      return {
+        name: this.name,
+        minPrice: this.minPrice,
+        maxPrice: this.maxPrice,
+        bedrooms: this.bedrooms,
+        bathrooms: this.bathrooms,
+        storeys: this.storeys,
+        garages: this.garages,
+      };
+    },
   },
   methods: {
     submit() {
       this.loading = true;
       axios
-        .post(`http://${process.env.VUE_APP_API_URL}/v1.0.0/search`, {
-          name: this.name,
-          minPrice: this.minPrice,
-          maxPrice: this.maxPrice,
-          bedrooms: this.bedrooms,
-          bathrooms: this.bathrooms,
-          storeys: this.storeys,
-          garages: this.garages,
-        })
+        .post(
+          `http://${process.env.VUE_APP_API_URL}/v1.0.0/search`,
+          this.filtersData
+        )
         .then((data) => {
-          this.loading = false;
+          this.nextPage = data.data.houses.next_page_url;
           this.results = data.data.houses.data;
+          this.loading = false;
         });
     },
+    getNextHouses() {
+      window.onscroll = () => {
+        let bottomOfWindow =
+          document.documentElement.scrollTop + window.innerHeight ===
+          document.documentElement.offsetHeight;
+
+        if (bottomOfWindow && this.nextPage) {
+          axios.post(this.nextPage, this.filtersData).then((data) => {
+            this.nextPage = data.data.houses.next_page_url;
+            this.results = [...this.results, ...data.data.houses.data];
+            console.log(this.results);
+          });
+        }
+      };
+    },
+  },
+  beforeMount() {
+    this.submit();
   },
   mounted() {
-    this.submit();
+    this.getNextHouses();
   },
 };
 </script>
@@ -153,7 +184,7 @@ body {
 .loading {
   text-align: center;
   font-size: 20px;
-  margin-top: 30px;
+  margin: 30px 0;
 }
 .fade-enter-active {
   animation: finished 0.3s reverse;
